@@ -1,0 +1,19 @@
+[
+    {
+        "modid": "h21",
+        "name": "SetRank",
+        "version": "1.0",
+        "dependencies": [
+            "spongeapi@7.1.0"
+        ],
+        "requiredMods": [
+            "spongeapi@7.1.0"
+        ]
+    },
+    {
+        "modid": "plugins",
+        "name": "plugins",
+        "version": "1.0.0-SNAPSHOT",
+        "description": "Set rank plugin"
+    }
+]
