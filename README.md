@@ -3,6 +3,7 @@ Plugin provide permissions and commands for setting rank to players
 
 # TODO
 your chat main.config (for ex nucleus) need to be like this:
+
  #config.chat.template.prefix
  prefix="{{o:prefix:s}}{{o:rank:s}}{{displayname}}{{o:suffix:p}}&f: "
  
