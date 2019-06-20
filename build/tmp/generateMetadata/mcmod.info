@@ -1,0 +1,8 @@
+[
+    {
+        "modid": "plugins",
+        "name": "plugins",
+        "version": "1.0.0-SNAPSHOT",
+        "description": "Set rank plugin"
+    }
+]
