@@ -1,6 +1,13 @@
 # SetRankPlugin
 Plugin provide permissions and commands for setting rank to players 
 
+# TODO
+your chat main.config (for ex nucleus) need to be like this:
+ #config.chat.template.prefix
+ prefix="{{o:prefix:s}}{{o:rank:s}}{{displayname}}{{o:suffix:p}}&f: "
+ 
+ DONT forget to add {{o:rank:s}} !
+
 # Commands:
 rankset - alias: setrank, permission: setrank.commands.set, discription: Sets rank to the player.
 
