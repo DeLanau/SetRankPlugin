@@ -11,8 +11,8 @@
         ]
     },
     {
-        "modid": "plugins",
-        "name": "plugins",
+        "modid": "setrankplugin",
+        "name": "SetRankPlugin",
         "version": "1.0.0-SNAPSHOT",
         "description": "Set rank plugin"
     }
