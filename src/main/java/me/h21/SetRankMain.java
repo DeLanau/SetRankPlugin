@@ -26,7 +26,7 @@ import java.nio.file.Path;
 
 import static org.spongepowered.api.Sponge.getGame;
 
-@Plugin(id = "h21", name = "SetRank", version = "1.0")
+@Plugin(id = "h21", name = "SetRank", version = "1.0", authors = {"DeLanau/h21"})
 public class SetRankMain {
 
     @Inject
