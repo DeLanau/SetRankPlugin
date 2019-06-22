@@ -7,6 +7,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -107,7 +108,7 @@ public class SetRankMain {
                         if(config.getNode("Black list").getList(TypeToken.of(String.class)).toString().toLowerCase().contains(
                                 rank.toString().toLowerCase().replaceAll("&.", ""))) {
 
-                            src.sendMessage(Text.of("NNNNOOOO!"));
+                            src.sendMessage(Text.of(TextColors.RED, "Your rank is in Black list!"));
 
                             return CommandResult.empty();
                         }
@@ -192,7 +193,7 @@ public class SetRankMain {
                         if (config.getNode("Black list").getList(TypeToken.of(String.class)).toString().toLowerCase().contains(
                                 rank.toString().toLowerCase().replaceAll("&.", ""))) {
 
-                            src.sendMessage(Text.of("NNNNOOOO!"));
+                            src.sendMessage(Text.of(TextColors.RED, "Your rank is in Black list!"));
 
                             return CommandResult.empty();
                         }
