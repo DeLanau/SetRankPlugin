@@ -1,4 +1,4 @@
-package me.setrank;
+package me.h21;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
@@ -7,7 +7,6 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -30,7 +29,7 @@ import java.util.List;
 
 import static org.spongepowered.api.Sponge.getGame;
 
-@Plugin(id = "setrank", name = "SetRank", version = "2.0", authors = {"DeLanau/h21"})
+@Plugin(id = "h21", name = "SetRank", version = "2.0", authors = {"DeLanau/h21"})
 public class SetRankMain {
 
     @Inject
@@ -98,7 +97,7 @@ public class SetRankMain {
 
         CommandSpec rank_add = CommandSpec.builder()
                 .description(Text.of("Adds rank"))
-                .permission("setrank.commands.add")
+                .permission("h21.commands.add")
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("rank"))))
                 .executor((CommandSource src, CommandContext args) -> {
 
@@ -134,7 +133,7 @@ public class SetRankMain {
 
         CommandSpec rank_remove = CommandSpec.builder()
                 .description(Text.of("Removes rank"))
-                .permission("setrank.commands.remove")
+                .permission("h21.commands.remove")
                 .executor((CommandSource src, CommandContext args) -> {
                 //main thing, removes rank and send message to player
                     cmdManager.process(Sponge.getServer().getConsole(), "lp user "+src.getName()+" meta unset rank");
@@ -148,7 +147,7 @@ public class SetRankMain {
 
         CommandSpec rank_reload = CommandSpec.builder()
                 .description(Text.of("Reload config file"))
-                .permission("setrank.admin.reload")
+                .permission("h21.admin.reload")
                 .executor((CommandSource src, CommandContext args) -> {
                     //main thing, reloads config file
                     try {
@@ -177,7 +176,7 @@ public class SetRankMain {
 
         CommandSpec rank_other_add = CommandSpec.builder()
                 .description(Text.of("Adds rank to other player"))
-                .permission("setrank.admin.add")
+                .permission("h21.admin.add")
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
                         GenericArguments.remainingJoinedStrings(Text.of("rank")))
@@ -227,7 +226,7 @@ public class SetRankMain {
 
         CommandSpec rank_other_remove = CommandSpec.builder()
                 .description(Text.of("Remove rank from other player"))
-                .permission("setrank.admin.remove")
+                .permission("h21.admin.remove")
                 .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
                 .executor((CommandSource src, CommandContext args) -> {
 
