@@ -37,4 +37,4 @@ Batter check for rank length, excluding color codes. Before &3Test.length() == 6
 
 Permission name change.
 
-2 commands instead 4, added childs to 2 basic commands.
+2 commands instead 4, added child to 2 basic commands.
