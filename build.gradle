@@ -6,8 +6,8 @@ plugins {
 compileJava.options.encoding = 'UTF-8'
 
 archivesBaseName = 'SetRankPlugin'
-group = 'me.h21'
-version = '1.0.0-SNAPSHOT'
+group = 'me.setrank'
+version = '2.0.0-SNAPSHOT'
 description = 'Set rank plugin'
 
 repositories {
