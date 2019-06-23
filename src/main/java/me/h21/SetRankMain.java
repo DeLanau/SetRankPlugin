@@ -7,6 +7,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -16,6 +17,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.plugin.Plugin;
@@ -29,7 +31,7 @@ import java.util.List;
 
 import static org.spongepowered.api.Sponge.getGame;
 
-@Plugin(id = "h21", name = "SetRank", version = "2.0", authors = {"DeLanau/h21"})
+@Plugin(id = "h21", name = "SetRank", version = "2.1", authors = {"DeLanau/h21"})
 public class SetRankMain {
 
     @Inject
@@ -58,15 +60,16 @@ public class SetRankMain {
                 config.getNode("Rank character length")
                         .setComment("Determines length of rank, to prevent super big ranks like 'LOOOOOOOOOOOOOOOOL' etc. Default value 6.")
                         .setValue(6);
+                //create config option check if rank is written with LATIN letters.
+                config.getNode("Latin letters").setComment("If player have at least one non latin letter in rank, he will get error").setValue(false);
                 //create config option check rankother true/false
-                config.getNode("Check black list and rank lengt for rankother add command").setValue(false);
+                config.getNode("Check rankother add").setComment("Check black list, rank length and latin letters for rankother add command").setValue(false);
                 //create list
                 List<String> list = new ArrayList<>();
                 list.add("Admin");
                 list.add("Moder");
                 //setting up list to the config file
-                config.getNode("Black list").setValue(new TypeToken<List<String>>(){}, list);
-
+                config.getNode("Black list").setComment("Doesn’t matter how the word will be spelled (upperCase/lowerCase)").setValue(new TypeToken<List<String>>(){}, list);
                 loader.save(config);
             }
         }catch (IOException | ObjectMappingException e){
@@ -89,6 +92,11 @@ public class SetRankMain {
         logger.info("SetRankPlugin have been stopped");
     }
 
+    @Listener
+    public void onReload(GameReloadEvent event) throws IOException {
+        loader.load();
+    }
+
     private void createAndRegisterCmd(){
 
         CommandManager cmdManager = Sponge.getCommandManager();
@@ -97,7 +105,7 @@ public class SetRankMain {
 
         CommandSpec rank_add = CommandSpec.builder()
                 .description(Text.of("Adds rank"))
-                .permission("h21.commands.add")
+                .permission("setrank.commands.add")
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("rank"))))
                 .executor((CommandSource src, CommandContext args) -> {
 
@@ -107,9 +115,15 @@ public class SetRankMain {
                         if(config.getNode("Black list").getList(TypeToken.of(String.class)).toString().toLowerCase().contains(
                                 rank.toString().toLowerCase().replaceAll("&.", ""))) {
 
-                            src.sendMessage(Text.of(TextColors.RED, "Your rank is in Black list!"));
+                            //changed from commandresult.empty() to ->
+                            throw new CommandException(Text.of("Your rank is in Black list!"));
 
-                            return CommandResult.empty();
+                        }else if(config.getNode("Latin letters").getBoolean() == true){
+
+                            if(!rank.toString().toLowerCase().replaceAll("&.", "").replaceAll("\\p{InCOMBINING_DIACRITICAL_MARKS}+","").matches("[A-Za-z]+"))
+
+                            throw new CommandException(Text.of("Your rank contains non latin letters!"));
+
                         }
                     } catch (ObjectMappingException e) {
                         e.printStackTrace();
@@ -117,9 +131,8 @@ public class SetRankMain {
                     //character length check
                     if(rank.toString().replaceAll("&.", "").length() > config.getNode("Rank character length").getInt()){
 
-                        src.sendMessage(Text.of(TextColors.RED, "Too long rank! Max character length is: "+config.getNode("Rank character length").getInt()));
-
-                        return CommandResult.empty();
+                        //changed from commandresult.empty() to ->
+                        throw new CommandException(Text.of("Too long rank! Max character length is: "+config.getNode("Rank character length").getInt()));
                     }
                     //main thing, adds rank and send message to player
                     cmdManager.process(Sponge.getServer().getConsole(), "lp user "+src.getName()+" meta set rank "+rank);
@@ -133,7 +146,7 @@ public class SetRankMain {
 
         CommandSpec rank_remove = CommandSpec.builder()
                 .description(Text.of("Removes rank"))
-                .permission("h21.commands.remove")
+                .permission("setrank.commands.remove")
                 .executor((CommandSource src, CommandContext args) -> {
                 //main thing, removes rank and send message to player
                     cmdManager.process(Sponge.getServer().getConsole(), "lp user "+src.getName()+" meta unset rank");
@@ -143,11 +156,11 @@ public class SetRankMain {
                 })
                 .build();
 
-        //rank reload command
+        //rank reload command ATTENTION currently not working!
 
         CommandSpec rank_reload = CommandSpec.builder()
                 .description(Text.of("Reload config file"))
-                .permission("h21.admin.reload")
+                .permission("setrank.admin.reload")
                 .executor((CommandSource src, CommandContext args) -> {
                     //main thing, reloads config file
                     try {
@@ -157,8 +170,9 @@ public class SetRankMain {
                         return CommandResult.success();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        src.sendMessage(Text.of(TextColors.RED, "Error reloading config!"));
-                        return CommandResult.empty();
+
+                        //changed from commandresult.empty() to ->
+                       throw  new CommandException(Text.of("Error reloading config!"));
                     }
                 })
                 .build();
@@ -169,14 +183,14 @@ public class SetRankMain {
                 .description(Text.of("Base command for player rank add/remove"))
                 .child(rank_add,"add")
                 .child(rank_remove, "remove")
-                .child(rank_reload, "reload")
+               // .child(rank_reload, "reload")
                 .build();
 
         //rankother add
 
         CommandSpec rank_other_add = CommandSpec.builder()
                 .description(Text.of("Adds rank to other player"))
-                .permission("h21.admin.add")
+                .permission("setrank.admin.add")
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
                         GenericArguments.remainingJoinedStrings(Text.of("rank")))
@@ -186,15 +200,14 @@ public class SetRankMain {
                     String rank = args.<String>getOne("rank").get();
 
                 //check for config value
-                if(config.getNode("Check black list and rank lengt for rankother add command").getBoolean() == true) {
+                if(config.getNode("Check rankother add").getBoolean() == true) {
                     //black list check
                     try {
                         if (config.getNode("Black list").getList(TypeToken.of(String.class)).toString().toLowerCase().contains(
                                 rank.toString().toLowerCase().replaceAll("&.", ""))) {
 
-                            src.sendMessage(Text.of(TextColors.RED, "Your rank is in Black list!"));
-
-                            return CommandResult.empty();
+                            //changed from commandresult.empty() to ->
+                           throw  new CommandException(Text.of("Your rank is in Black list!"));
                         }
                     } catch (ObjectMappingException e) {
                         e.printStackTrace();
@@ -202,17 +215,22 @@ public class SetRankMain {
                     //character length check
                     if (rank.toString().replaceAll("&.", "").length() > config.getNode("Rank character length").getInt()) {
 
-                        src.sendMessage(Text.of(TextColors.RED, "Too long rank! Max character length is: " + config.getNode("Rank character length").getInt()));
+                        //changed from commandresult.empty() to ->
+                        throw new CommandException(Text.of("Too long rank! Max character length is: " + config.getNode("Rank character length").getInt()));
+                    }
+                    if(config.getNode("Latin letters").getBoolean() == true){
 
-                        return CommandResult.empty();
+                        if(!rank.toString().toLowerCase().replaceAll("&.", "").replaceAll("\\p{InCOMBINING_DIACRITICAL_MARKS}+","").matches("[A-Za-z]+"))
+
+                            throw new CommandException(Text.of("Your rank contains non latin letters!"));
+
                     }
                 }
                     //check if player is online
                     if (player.isOnline() == false) {
 
-                        src.sendMessage(Text.of(TextColors.RED, "Player is offline!"));
-
-                        return CommandResult.empty();
+                        //changed from commandresult.empty() to ->
+                       throw new CommandException(Text.of("Player is offline!"));
                     }
                     //main thing, adds rank to other player and send message to player
                     cmdManager.process(Sponge.getServer().getConsole(), "lp user "+player.getName()+" meta set rank "+rank);
@@ -226,7 +244,7 @@ public class SetRankMain {
 
         CommandSpec rank_other_remove = CommandSpec.builder()
                 .description(Text.of("Remove rank from other player"))
-                .permission("h21.admin.remove")
+                .permission("setrank.admin.remove")
                 .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
                 .executor((CommandSource src, CommandContext args) -> {
 
@@ -234,9 +252,8 @@ public class SetRankMain {
                     //check if player is online
                     if(player.isOnline() == false){
 
-                        src.sendMessage(Text.of(TextColors.RED, "Player is offline!"));
-
-                        return CommandResult.empty();
+                        //changed from commandresult.empty() to ->
+                        throw new CommandException(Text.of("Player is offline!"));
                     }
 
                     cmdManager.process(Sponge.getServer().getConsole(), "lp user "+player.getName()+" meta unset rank");
