@@ -2,7 +2,11 @@
     {
         "modid": "h21",
         "name": "SetRank",
-        "version": "1.0",
+        "version": "2.1",
+        "authorList": [
+            "DeLanau/h21"
+        ],
+
         "dependencies": [
             "spongeapi@7.1.0"
         ],
@@ -11,9 +15,9 @@
         ]
     },
     {
-        "modid": "plugins",
-        "name": "plugins",
-        "version": "1.0.0-SNAPSHOT",
+        "modid": "setrankplugin",
+        "name": "SetRankPlugin",
+        "version": "2.1.0-SNAPSHOT",
         "description": "Set rank plugin"
     }
 ]
