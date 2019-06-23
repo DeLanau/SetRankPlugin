@@ -14,7 +14,7 @@ rank add - permission: setrank.commands.add, discription: Adds rank.
 
 rank remove - permission: setrank.commands.remove, discription: Removes rank.
 
-rank reload - permission: setrank.admin.reload, discription: Reloads config file.
+rank reload - permission: setrank.admin.reload, discription: Reloads config file. //currently removed! 
 
 rankother add - permission: setrank.admin.add, discription: Adds rank to other player.
 
@@ -23,7 +23,9 @@ rankother remove - permission: setrank.admin.remove, discription: Remove a rank 
 # Config: 
 Rank character length - Determines length of rank, to prevent super big ranks like 'LOOOOOOOOOOOOOOOOL' etc. Default value 6.
 
-Check black list and rank lengt for "rankother add" command - Default false.
+Latin Letters check - If player have at least one non latin letter in rank, he will get error. Default false
+
+Check black list, rank lengt and latin letters for "rankother add" command - Default false.
 
 "Black list"=[
     Admin,
@@ -31,6 +33,8 @@ Check black list and rank lengt for "rankother add" command - Default false.
 ]
 
 # ChangeLog 
+22.06.2019
+
 Added smart black list in which you can add commands and it doesn’t matter how the word will be spelled the blacklisted word won’t be able for use to casual players.
 
 Batter check for rank length, excluding color codes. Before &3Test.length() == 6, now length() == 4. 
@@ -38,3 +42,6 @@ Batter check for rank length, excluding color codes. Before &3Test.length() == 6
 Permission name change.
 
 2 commands instead 4, added child to 2 basic commands.
+
+22.06.2019
+Permissions fixes, added latin letters check. Code changes. 
