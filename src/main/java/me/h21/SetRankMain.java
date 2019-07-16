@@ -22,7 +22,7 @@ import java.io.File;
 
 import static org.spongepowered.api.Sponge.getGame;
 
-@Plugin(id = "h21", name = "SetRank", version = "Recoded", authors = {"DeLanau/h21"})
+@Plugin(id = "h21", name = "SetRank", version = "Recoded", authors = {"DeLanau/h21"}, description = "Set rank plugin recoded")
 public class SetRankMain {
 
     @Inject
