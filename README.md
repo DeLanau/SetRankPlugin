@@ -45,3 +45,6 @@ Permission name change.
 
 23.06.2019
 Permissions fixes, added latin letters check. Code changes. 
+
+16.07.2019
+Reload command and sponge plugins reload now working. Completely recoded some parts of plugin, instead of having 1 heavy main.class i split it into smaller classes. 
