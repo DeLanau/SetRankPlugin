@@ -10,15 +10,20 @@ your chat main.config (for ex nucleus) need to be like this:
  DONT forget to add {{o:rank:s}} !
 
 # Commands:
-rank add - permission: setrank.commands.add, discription: Adds rank.
+
+Alias for rank: "r" or "rank".
+
+rank add <rank> - permission: setrank.commands.add, discription: Adds rank.
 
 rank remove - permission: setrank.commands.remove, discription: Removes rank.
 
-rank reload - permission: setrank.admin.reload, discription: Reloads config file. //currently removed! 
+rank reload - permission: setrank.admin.reload, discription: Reloads config file. //working
 
-rankother add - permission: setrank.admin.add, discription: Adds rank to other player.
+Alias for rankother: "ro" or "ran
 
-rankother remove - permission: setrank.admin.remove, discription: Remove a rank from other player.
+rankother add <player> <rank> - permission: setrank.admin.add, discription: Adds rank to other player.
+
+rankother remove <player> - permission: setrank.admin.remove, discription: Remove a rank from other player.
 
 # Config: 
 Rank character length - Determines length of rank, to prevent super big ranks like 'LOOOOOOOOOOOOOOOOL' etc. Default value 6.
@@ -45,3 +50,6 @@ Permission name change.
 
 23.06.2019
 Permissions fixes, added latin letters check. Code changes. 
+
+16.07.2019
+Reload command and sponge plugins reload now working. Completely recoded some parts of plugin, instead of having 1 heavy main.class i split it into smaller classes. 
