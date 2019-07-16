@@ -8,7 +8,6 @@ compileJava.options.encoding = 'UTF-8'
 archivesBaseName = 'SetRankPlugin'
 group = 'me.h21'
 version = '3.0-recoded'
-description = 'Set rank plugin'
 
 repositories {
     jcenter()
