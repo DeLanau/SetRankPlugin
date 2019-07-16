@@ -6,8 +6,13 @@ plugins {
 compileJava.options.encoding = 'UTF-8'
 
 archivesBaseName = 'SetRankPlugin'
+<<<<<<< Updated upstream
 group = 'me.h21'
 version = '2.1.0-SNAPSHOT'
+=======
+group = 'me.h21'
+version = '3.0'
+>>>>>>> Stashed changes
 description = 'Set rank plugin'
 
 repositories {
