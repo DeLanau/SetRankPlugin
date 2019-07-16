@@ -1,4 +1,4 @@
-﻿package me.h21;
+package me.h21;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
